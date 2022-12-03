@@ -22,7 +22,6 @@ def priority_translator(char):
 
 def solve_1(data):
     # 10:21 to 10:34
-
     common_items = list()
     for first, second in data:
         common_item = first & second
@@ -34,7 +33,6 @@ def solve_1(data):
 def solve_2(data):
     # 11:50 to 11:57
     common_items = list()
-
     for first, second, third in zip(data[::3], data[1::3], data[2::3]):
         common_item = set(first[0] | first[1]) & set(
             second[0] | second[1]) & set(third[0] | third[1])

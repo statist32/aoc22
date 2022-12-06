@@ -9,4 +9,5 @@ python_file="${folder}/main.py"
 test_data_file="${folder}/input_test.txt"
 data_file="${folder}/input.txt"
 
-touch ${python_file} ${test_data_file} ${data_file};
+touch ${test_data_file} ${data_file};
+cp template.py ${python_file};

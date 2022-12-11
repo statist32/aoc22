@@ -1,6 +1,6 @@
 from pprint import pprint
 from dataclasses import dataclass, field
-from math import floor
+from math import floor, prod
 
 
 @dataclass
@@ -15,30 +15,28 @@ class Monkey():
         goal_monkey = self.test["false"]
         if not item % self.test["number"]:
             goal_monkey = self.test["true"]
-        DIVISOR = 9699690
-
-        monkeys[goal_monkey].catch_item(item % DIVISOR)
-        # print(item, self.id, goal_monkey)
+        modulo = prod([monkey.test["number"] for monkey in monkeys])
+        monkeys[goal_monkey].catch_item(item % modulo)
 
     def catch_item(self, item):
         self.items.append(item)
 
-    def inspect_items(self, monkeys):
-        self.items = [self.inspect_item(item) for item in self.items]
+    def inspect_items(self, monkeys, worry_reduction):
+        self.items = [self.inspect_item(item, worry_reduction)
+                      for item in self.items]
         self.inspection_count += len(self.items)
         while len(self.items):
             item = self.items.pop()
             self.throw_item_to(item, monkeys)
 
-    def inspect_item(self, item):
+    def inspect_item(self, item, worry_reduction):
         operator, value = self.operation
         worry_level = item
         if "+" in operator:
             worry_level += int(value) if not "old" in value else worry_level
         elif "*" in operator:
             worry_level *= int(value) if not "old" in value else worry_level
-        worry_level = floor(worry_level/1)
-        # print(self.operation, self.id, item, worry_level)
+        worry_level = floor(worry_level/worry_reduction)
         return worry_level
 
 
@@ -75,32 +73,24 @@ def solve_1(data):
     # 16:48 to 18:00
     for i in range(20):
         for monkey in data:
-            monkey.inspect_items(data)
-    pprint(data)
+            monkey.inspect_items(data, 3)
     a, b = sorted([monkey.inspection_count for monkey in data])[-2:]
     return a*b
 
 
 def solve_2(data):
     # 18:04 to 18:12
-    divisor = 1
-    for number in [monkey.test["number"] for monkey in data]:
-        divisor *= number
-    print(divisor)
-    for i in range(10000):
+    for _ in range(10000):
         for monkey in data:
-            monkey.inspect_items(data)
-    # pprint(data)
+            monkey.inspect_items(data, 1)
     a, b = sorted([monkey.inspection_count for monkey in data])[-2:]
     return a*b
 
 
 if __name__ == "__main__":
-    data = read_data("input_test.txt")
-    # pprint(data)
-    # print("Test part 1: ", solve_1(data))
-    print("Test part 2: ", solve_2(data))
+    # pprint(read_data("input_test.txt"))
+    print("Test part 1: ", solve_1(read_data("input_test.txt")))
+    print("Test part 2: ", solve_2(read_data("input_test.txt")))
 
-    data = read_data("input.txt")
-    # print("Real part 1: ", solve_1(data))
-    print("Real part 2: ", solve_2(data))
+    print("Real part 1: ", solve_1(read_data("input.txt")))
+    print("Real part 2: ", solve_2(read_data("input.txt")))

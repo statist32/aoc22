@@ -21,11 +21,10 @@ def solve_2(data):
 
 
 if __name__ == "__main__":
-    data = read_data("input_test.txt")
-    pprint(data)
-    print("Test part 1: ", solve_1(data))
-    print("Test part 2: ", solve_2(data))
+    pprint(read_data("input_test.txt"))
 
-    data = read_data("input.txt")
-    print("Real part 1: ", solve_1(data))
-    print("Real part 2: ", solve_2(data))
+    print("Test part 1: ", solve_1(read_data("input_test.txt")))
+    print("Test part 2: ", solve_2(read_data("input_test.txt")))
+
+    print("Real part 1: ", solve_1(read_data("input.txt")))
+    print("Real part 2: ", solve_2(read_data("input.txt")))
